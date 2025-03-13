@@ -1,4 +1,8 @@
-﻿export default [
+﻿import component from "@/locales/en-US/component";
+import route from "mock/route";
+import path from "path";
+
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -36,12 +40,40 @@
 		component: './RandomUser',
 		icon: 'ArrowsAltOutlined',
 	},
-
+	{
+		path: '/QuanLiNhanVien',
+		name: 'Quản lý nhân viên ',
+		component: './QuanLiNhanVien/StaffManagement',
+		icon: 'BarcodeOutlined', 
+	},
+	{
+		path: '/appointment',
+		name: 'Lịch Hẹn',
+		component: './Appointment',
+		icon: 'CalendarOutlined',
+	},
 	{
 		path: '/DanhGia',
-		name: 'DanhGia',
+		name: 'Đánh Giá',
 		component: './DanhGia/Form.tsx',
-		icon: 'ArrowsAltOutlined',
+		icon: 'PicRightOutlined',
+	},
+	{
+		path: '/ThongKe',
+		name: 'Thông Kê',
+		icon: 'BarChartOutlined',
+		routes: [
+			{
+				path : '/DoanhThu',
+				name : 'Doanh Thu',
+				component: './thongKe/DoanhThu.tsx',
+			},
+			{
+				path : '/LichHen',
+				name : 'Lịch Hẹn',
+				component : './thongKe/LichHen.tsx',
+			}
+		]
 	},
 
 	// DANH MUC HE THONG
