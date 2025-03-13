@@ -1,4 +1,6 @@
-﻿export default [
+﻿import component from '@/locales/en-US/component';
+
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -35,6 +37,11 @@
 		name: 'RandomUser',
 		component: './RandomUser',
 		icon: 'ArrowsAltOutlined',
+	},
+	{
+		path: '/QuanLiNhanVien',
+		name: 'Quản lý nhân viên ',
+		component: './QuanLiNhanVien/StaffManagement',
 	},
 
 	// DANH MUC HE THONG
