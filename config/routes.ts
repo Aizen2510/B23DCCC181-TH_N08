@@ -1,4 +1,5 @@
 ﻿import component from '@/locales/en-US/component';
+import { icons } from 'antd/lib/image/PreviewGroup';
 import route from 'mock/route';
 import path from 'path';
 
@@ -74,6 +75,18 @@ export default [
 				component: './thongKe/LichHen.tsx',
 			},
 		],
+	},
+	{
+		path: 'ThongTinVanBang',
+		name: 'Thông Tin Văn Bằng',
+		component: './ThongTinVanBang',
+		icon: 'FileTextOutlined',
+	},
+	{
+		path: '/TraCuu',
+		name: 'Tra Cứu Văn Bằng',
+		component: './TraCuuVanBang',
+		icon: 'FullscreenOutlined',
 	},
 
 	// DANH MUC HE THONG
