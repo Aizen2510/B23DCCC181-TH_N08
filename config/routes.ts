@@ -1,6 +1,6 @@
-﻿import component from '@/locales/en-US/component';
-import route from 'mock/route';
-import path from 'path';
+﻿// import component from '@/locales/en-US/component';
+// import route from 'mock/route';
+// import path from 'path';
 
 export default [
 	{
@@ -74,6 +74,12 @@ export default [
 				component: './thongKe/LichHen.tsx',
 			},
 		],
+	},
+	{
+		path: '/form-config',
+		name: 'Cấu hình biểu mẫu',
+		component: './FormConfig',
+		icon: 'SettingOutlined',
 	},
 
 	// DANH MUC HE THONG
