@@ -29,8 +29,10 @@ const useInitModel = <T,>(
 	const [filters, setFilters] = useState<TFilter<T>[]>(initFilter ?? []);
 	const [condition, setCondition] = useState<{ [k in keyof T]?: any } | any>(initCondition);
 	const [sort, setSort] = useState<{ [k in keyof T]?: 1 | -1 } | undefined>(initSort);
-	const [edit, setEdit] = useState<boolean>(false);
+	const [isEdit, setEdit] = useState<boolean>(false);
 	const [isView, setIsView] = useState<boolean>(true);
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [isDetail, setIsDetail] = useState(false);
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);
 	const [total, setTotal] = useState<number>(0);
 	const [importHeaders, setImportHeaders] = useState<TImportHeader[]>([]); // Import Headers lấy từ API
@@ -311,7 +313,6 @@ const useInitModel = <T,>(
 		setIsView(true);
 		setVisibleForm(true);
 	};
-
 	//#region BASE IMPORT
 	/**
 	 * Lấy header cho chức năng import
@@ -454,7 +455,7 @@ const useInitModel = <T,>(
 		setFilters,
 		condition,
 		setCondition,
-		edit,
+		isEdit,
 		setEdit,
 		isView,
 		setIsView,
@@ -486,6 +487,10 @@ const useInitModel = <T,>(
 		selectedIds,
 		setSelectedIds,
 		initFilter,
+		isModalVisible,
+		setIsModalVisible,
+		isDetail,
+		setIsDetail,
 	};
 };
 

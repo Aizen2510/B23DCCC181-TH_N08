@@ -1,4 +1,8 @@
-﻿export default [
+﻿import component from '@/locales/en-US/component';
+import route from 'mock/route';
+import path from 'path';
+
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -35,6 +39,26 @@
 		name: 'RandomUser',
 		component: './RandomUser',
 		icon: 'ArrowsAltOutlined',
+	},
+	{
+		path: '/degree-book',
+		name: 'Quản lý sổ văn bằng',
+		// component: './QuanLiSoVanBang/degreeBookManagement',
+		icon: 'BookOutlined',
+		routes: [
+			{
+				path: '/degree-book/so-van-bang',
+				name: 'Sổ Văn Bằng',
+				component: './QuanLiSoVanBang/degreeBookManagement',
+				icon: 'BookOutlined',
+			},
+			{
+				path: '/degree-book/quyet-dinh-tot-nghiep',
+				name: 'Quyết Định Tốt Nghiệp',
+				component: './QuanLiQuyetDinhTotNghiep/graduationDecisionManagement',
+				icon: 'FileDoneOutlined',
+			},
+		],
 	},
 
 	// DANH MUC HE THONG

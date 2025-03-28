@@ -37,7 +37,7 @@ const FormRandomUser = () => {
 
 			<div className='form-footer'>
 				<Button htmlType='submit' type='primary'>
-					{isEdit ? 'Save' : 'Insert'}
+					{isEdit ? 'Insert' : 'Save'}
 				</Button>
 				<Button onClick={() => setVisible(false)}>Cancel</Button>
 			</div>
