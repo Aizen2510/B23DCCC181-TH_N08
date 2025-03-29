@@ -53,6 +53,12 @@ export default [
 		component: './TraCuuVanBang',
 		icon: 'FullscreenOutlined',
 	},
+	{
+		path: '/form-config',
+		name: 'Cấu hình biểu mẫu',
+		component: './FormConfig',
+		icon: 'SettingOutlined',
+	},
 
 	// DANH MUC HE THONG
 	// {
