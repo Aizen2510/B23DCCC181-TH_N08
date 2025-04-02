@@ -52,29 +52,7 @@ export default [
 		component: './Appointment',
 		icon: 'CalendarOutlined',
 	},
-	{
-		path: '/DanhGia',
-		name: 'Đánh Giá',
-		component: './DanhGia',
-		icon: 'PicRightOutlined',
-	},
-	{
-		path: '/ThongKe',
-		name: 'Thông Kê',
-		icon: 'BarChartOutlined',
-		routes: [
-			{
-				path: '/DoanhThu',
-				name: 'Doanh Thu',
-				component: './thongKe/DoanhThu.tsx',
-			},
-			{
-				path: '/LichHen',
-				name: 'Lịch Hẹn',
-				component: './thongKe/LichHen.tsx',
-			},
-		],
-	},
+	
 
 	// DANH MUC HE THONG
 	// {
