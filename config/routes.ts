@@ -42,6 +42,26 @@ export default [
 		icon: 'ArrowsAltOutlined',
 	},
 	{
+		path: '/degree-book',
+		name: 'Quản lý sổ văn bằng',
+		// component: './QuanLiSoVanBang/degreeBookManagement',
+		icon: 'BookOutlined',
+		routes: [
+			{
+				path: '/degree-book/so-van-bang',
+				name: 'Sổ Văn Bằng',
+				component: './QuanLiSoVanBang/degreeBookManagement',
+				icon: 'BookOutlined',
+			},
+			{
+				path: '/degree-book/quyet-dinh-tot-nghiep',
+				name: 'Quyết Định Tốt Nghiệp',
+				component: './QuanLiQuyetDinhTotNghiep/graduationDecisionManagement',
+				icon: 'FileDoneOutlined',
+			},
+		],
+	},
+	{
 		path: 'ThongTinVanBang',
 		name: 'Thông Tin Văn Bằng',
 		component: './ThongTinVanBang',
