@@ -78,6 +78,31 @@ export default [
 			// },
 		],
 	},
+	{
+		path: '/club-management',
+		icon: 'TeamOutlined',
+		name: 'Quản lý câu lạc bộ',
+		routes: [
+			{
+				path: '/club-management/danh-sach-cau-lac-bo',
+				name: 'Danh sách câu lạc bộ',
+				component: './QuanLiCauLacBo/DanhSachCauLacBo/ClubList',
+				icon: 'TeamOutlined',
+			},
+			{
+				path: '/club-management/quan-li-don-dang-ky-thanh-vien',
+				name: 'Đơn Đăng Ký',
+				component: './QuanLiCauLacBo/QuanLiDonDangKiThanhVien',
+				icon: 'FormOutlined',
+			},
+			{
+				path: '/club-management/quan-li-thanh-vien',
+				name: 'Thành viên câu lạc bộ',
+				component: './QuanLiCauLacBo/QuanLiThanhVien/ClubMembers',
+				icon: 'UsergroupAddOutlined',
+			},
+		],
+	},
 
 	// DANH MUC HE THONG
 	// {

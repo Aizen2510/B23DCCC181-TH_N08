@@ -25,6 +25,33 @@ const DegreeBookManagement: React.FC = () => {
 		getDataDegreeBook();
 	}, []);
 
+	const handleAddNew = () => {
+		setIsModalVisible(true);
+		setEdit(false);
+	};
+
+	const handleViewDetails = (record: VanBang.DegreeBook) => {
+		setSelectedBook(record);
+		setIsDetail(true);
+	};
+
+	const handleEdit = (record: VanBang.DegreeBook) => {
+		setSelectedBook(record);
+		setIsModalVisible(true);
+		setEdit(true);
+	};
+
+	// const handleModalOk = () => {
+	// 	setIsModalVisible(false);
+	// 	setSelectedBook(null);
+	// 	form.submit();
+	// };
+
+	const handleModalCancel = () => {
+		setIsModalVisible(false);
+		// setSelectedBook(null);
+	};
+
 	const columns: ColumnsType<VanBang.DegreeBook> = [
 		{ title: 'ID', dataIndex: 'id', key: 'id' },
 		{
@@ -70,33 +97,6 @@ const DegreeBookManagement: React.FC = () => {
 			),
 		},
 	];
-
-	const handleAddNew = () => {
-		setIsModalVisible(true);
-		setEdit(false);
-	};
-
-	const handleViewDetails = (record: VanBang.DegreeBook) => {
-		setSelectedBook(record);
-		setIsDetail(true);
-	};
-
-	const handleEdit = (record: VanBang.DegreeBook) => {
-		setSelectedBook(record);
-		setIsModalVisible(true);
-		setEdit(true);
-	};
-
-	// const handleModalOk = () => {
-	// 	setIsModalVisible(false);
-	// 	setSelectedBook(null);
-	// 	form.submit();
-	// };
-
-	const handleModalCancel = () => {
-		setIsModalVisible(false);
-		// setSelectedBook(null);
-	};
 
 	return (
 		<div>

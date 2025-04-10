@@ -3,6 +3,7 @@ import { Form, Input, Button, DatePicker, Select, message } from 'antd';
 import { useModel } from 'umi';
 import moment from 'moment';
 import { update } from 'lodash';
+import { VanBang } from '@/types';
 const FormGraduationDecision = () => {
 	const [form] = Form.useForm();
 	const {
@@ -85,7 +86,7 @@ const FormGraduationDecision = () => {
 				rules={[{ required: true, message: 'Vui lòng chọn sổ văn bằng' }]}
 			>
 				<Select placeholder='Chọn sổ văn bằng'>
-					{degreeBooks.map((book) => (
+					{degreeBooks.map((book: VanBang.DegreeBook) => (
 						<Select.Option key={book.id} value={book.id}>
 							Sổ văn bằng năm {book.year}
 						</Select.Option>
