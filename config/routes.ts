@@ -58,6 +58,24 @@ export default [
 				component: './QuanLiQuyetDinhTotNghiep/graduationDecisionManagement',
 				icon: 'FileDoneOutlined',
 			},
+			{
+				path: '/degree-book/cau-hinh-bieu-mau',
+				name: 'Cấu hình biểu mẫu',
+				component: './CauHinhBieuMauPhuLuc/formConfig',
+				icon: 'SettingOutlined',
+			},
+			{
+				path: '/degree-book/thong-tin-van-bang',
+				name: 'Thông Tin Văn Bằng',
+				component: './ThongTinVanBang',
+				icon: 'FileTextOutlined',
+			},
+			// {
+			// 	path: '/degree-book/tra-cuu-van-bang',
+			// 	name: 'Tra Cứu Văn Bằng',
+			// 	component: './TraCuuVanBang',
+			// 	icon: 'FullscreenOutlined',
+			// },
 		],
 	},
 

@@ -1,20 +1,21 @@
+import moment from 'moment';
 export namespace VanBang {
 	export interface DegreeBook {
 		id?: string;
 		year: number;
-		currentSequenceNumber: number;
+		currentSequenceNumber: number; // số văn bằng trong sổ
 	}
 
 	export interface Certificate {
 		id?: string;
-		graduationBookId: string; // mã sổ văn bằng
+		graduationBookId: string; // id văn bằng
 		sequenceNumber: number; // số thứ tự sổ văn bằng
-		certificateNumber: string; // mã văn bằng
+		decisionNumber: string; // số quyết định
 		studentId: string;
 		fullName: string;
 		dateOfBirth: string;
-		graduationDecisionId: string; // mã quyết định tốt nghiệp
-		additionalFields?: Record<string, any>;
+		graduationDecisionId: string; // id quyết định
+		additionalFields?: { key: string; value: any }[]; // Trường bổ sung
 	}
 }
 
@@ -24,10 +25,10 @@ export namespace QuyetDinh {
 	export interface GraduationDecision {
 		id?: string;
 		decisionNumber: string; // số quyết định
-		issuedDate: string; // ngày ban hành (ISO format YYYY-MM-DD)
+		issuedDate: moment.Moment; // ngày ban hành (ISO format YYYY-MM-DD)
 		summary: string; // trích yếu
-		graduationBook: string; // số văn bằng liên quan
-		totalLookups: number; // tổng số lượt xem
+		graduationBookId: string; // số văn bằng liên quan
+		totalLookups: number; // tổng số tra cứu
 	}
 }
 
@@ -36,7 +37,7 @@ export namespace BieuMau {
 		id?: string;
 		name: string;
 		dataType: 'String' | 'Number' | 'Date';
-		inputControl: string;
+		inputControl: string; // Loại điều khiển nhập liệu
 	}
 }
 

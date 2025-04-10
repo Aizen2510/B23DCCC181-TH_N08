@@ -2,12 +2,22 @@ import { QuyetDinh } from '@/types';
 import { Form, Input, Button, DatePicker, Select, message } from 'antd';
 import { useModel } from 'umi';
 import moment from 'moment';
+import { update } from 'lodash';
 const FormGraduationDecision = () => {
 	const [form] = Form.useForm();
-	const { isEdit, setIsModalVisible, degreeBooks, decisions, setDecisions, currentDecision, setCurrentDecision } =
-		useModel('degreebook');
+	const {
+		isEdit,
+		setIsModalVisible,
+		degreeBooks,
+		decisions,
+		setDecisions,
+		currentDecision,
+		setCurrentDecision,
+		addGraduationDecision,
+		updateGraduationDecision,
+	} = useModel('degreebook');
 	const handleSubmit = () => {
-		form.validateFields().then((values: any) => {
+		form.validateFields().then(async (values: any) => {
 			// const dataTemp: QuyetDinh.GraduationDecision[] = decisions ? [...decisions] : [];
 			// if (currentDecision) {
 			// 	const index = dataTemp.findIndex((item: QuyetDinh.GraduationDecision) => item.id === currentDecision.id);
@@ -31,15 +41,15 @@ const FormGraduationDecision = () => {
 			const newDecision: QuyetDinh.GraduationDecision = {
 				...values,
 				id: currentDecision?.id || `${decisions.length + 1}`,
+				issuedDate: moment(values.issuedDate).format('DD/MM/YYYY'), // Định dạng trước khi lưu vào localStorage
+				totalLookups: 0,
 			};
 
 			if (currentDecision) {
-				// Cập nhật
-				setDecisions(decisions.map((item) => (item.id === currentDecision.id ? newDecision : item)));
+				await updateGraduationDecision(newDecision);
 				message.success('Cập nhật quyết định thành công');
 			} else {
-				// Thêm mới
-				setDecisions([...decisions, newDecision]);
+				await addGraduationDecision(newDecision);
 				message.success('Thêm quyết định thành công');
 			}
 			setIsModalVisible(false);
@@ -61,6 +71,7 @@ const FormGraduationDecision = () => {
 				label='Ngày Ban Hành'
 				rules={[{ required: true, message: 'Vui lòng chọn ngày ban hành' }]}
 			>
+				{/* Định dạng lại ngày tháng nếu ko Js sẽ chuyển thành chuỗi ISO */}
 				<DatePicker style={{ width: '100%' }} format='DD/MM/YYYY' />
 			</Form.Item>
 
@@ -69,7 +80,7 @@ const FormGraduationDecision = () => {
 			</Form.Item>
 
 			<Form.Item
-				name='graduationRegistryBookId'
+				name='graduationBookId'
 				label='Sổ Văn Bằng'
 				rules={[{ required: true, message: 'Vui lòng chọn sổ văn bằng' }]}
 			>

@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { Table, Button, Modal, Form, Space } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import type { ColumnsType } from 'antd/es/table';
 import { useModel } from 'umi';
 import type { QuyetDinh } from '@/types/index';
 import FormGraduationDecision from './formDecision';
-import moment from 'moment';
 const GraduationDecisionManagement: React.FC = () => {
 	const {
 		isModalVisible,
+		isEdit,
+		setEdit,
 		setIsModalVisible,
-
 		degreeBooks,
 		setDegreeBooks,
 		currentDecision,
@@ -17,7 +18,9 @@ const GraduationDecisionManagement: React.FC = () => {
 		decisions,
 		setDecisions,
 	} = useModel('degreebook');
+
 	const [form] = Form.useForm();
+
 	useEffect(() => {
 		const storedData = localStorage.getItem('graduationDecison');
 		if (storedData) {
@@ -30,12 +33,14 @@ const GraduationDecisionManagement: React.FC = () => {
 	useEffect(() => {
 		localStorage.setItem('graduationDecison', JSON.stringify(decisions));
 	}, [decisions]);
+
 	const handleEdit = (record: QuyetDinh.GraduationDecision) => {
 		setCurrentDecision(record);
 		form.setFieldsValue({
 			...record,
 		});
 		setIsModalVisible(true);
+		setEdit(true);
 	};
 	const handleDelete = (record_book_id?: string) => {
 		if (!record_book_id) return;
@@ -43,7 +48,8 @@ const GraduationDecisionManagement: React.FC = () => {
 			title: 'Xóa Quyết Định',
 			content: 'Bạn có chắc chắn muốn xóa quyết định này?',
 			onOk: () => {
-				const deletedDecision = decisions.filter((item) => item.id !== record_book_id);
+				const dataLocal: any = JSON.parse(localStorage.getItem('graduationDecison') as any);
+				const deletedDecision = dataLocal.filter((item: any) => item.id !== record_book_id);
 				setDecisions(deletedDecision);
 				localStorage.setItem('graduationDecison', JSON.stringify(deletedDecision));
 			},
@@ -54,28 +60,32 @@ const GraduationDecisionManagement: React.FC = () => {
 		setCurrentDecision(null);
 		form.resetFields();
 		setIsModalVisible(true);
+		setEdit(false);
 	};
-	const columns = [
+	const columns: ColumnsType<QuyetDinh.GraduationDecision> = [
 		{
 			title: 'Số Quyết Định',
 			dataIndex: 'decisionNumber',
+			align: 'center',
 			key: 'decisionNumber',
 		},
 		{
 			title: 'Ngày Ban Hành',
 			dataIndex: 'issuedDate',
+			align: 'center',
 			key: 'issuedDate',
-			render: (date: moment.Moment) => date.format('DD/MM/YYYY'), // định nghĩa cách hiển thị dữ liệu
 		},
 		{
 			title: 'Trích Yếu',
 			dataIndex: 'summary',
+			align: 'center',
 			key: 'summary',
 		},
 		{
 			title: 'Sổ Văn Bằng',
-			dataIndex: 'graduationBook',
-			key: 'graduationBook',
+			dataIndex: 'graduationBookId',
+			align: 'center',
+			key: 'graduationBookId',
 			render: (bookId: string) => {
 				const book = degreeBooks.find((item) => item.id === bookId);
 				return book ? `Số quyết định năm ${book.year}` : 'Không xác định';
@@ -83,6 +93,7 @@ const GraduationDecisionManagement: React.FC = () => {
 		},
 		{
 			title: 'Thao Tác',
+			align: 'center',
 			key: 'actions',
 			// "_"đại diện giá trị của ô dữ liệu trong cột (theo dataIndex) nhưng không được sử dụng ở đây, đánh dấu tham số không được sử dụng trong logic
 			render: (_: any, record: QuyetDinh.GraduationDecision) => (
@@ -106,7 +117,7 @@ const GraduationDecisionManagement: React.FC = () => {
 			<Table columns={columns} dataSource={decisions} rowKey='id' />
 
 			<Modal
-				title={currentDecision ? 'Sửa Quyết Định' : 'Thêm Quyết Định'}
+				title={isEdit ? 'Sửa Quyết Định' : 'Thêm Quyết Định'}
 				visible={isModalVisible}
 				onOk={() => {}}
 				onCancel={() => setIsModalVisible(false)}

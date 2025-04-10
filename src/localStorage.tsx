@@ -1,10 +1,10 @@
 // Lưu dữ liệu vào localStorage
-const saveToLocalStorage = (key: string, data: any) => {
+export const saveToLocalStorage = (key: string, data: any) => {
 	localStorage.setItem(key, JSON.stringify(data));
 };
 
 // Lấy dữ liệu từ localStorage
-const getFromLocalStorage = (key: string) => {
+export const getFromLocalStorage = (key: string) => {
 	const data = localStorage.getItem(key);
 	return data ? JSON.parse(data) : [];
 };

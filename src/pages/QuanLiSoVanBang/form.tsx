@@ -2,15 +2,22 @@ import { Form, InputNumber, Button, message } from 'antd';
 import { useModel } from 'umi';
 import type { VanBang } from '@/types/index';
 const FormDegreeBook = () => {
-	const { isEdit, setIsModalVisible, degreeBooks, setDegreeBooks, getDataDegreeBook, selectedBook, setSelectedBook } =
-		useModel('degreebook');
+	const {
+		isEdit,
+		setIsModalVisible,
+		degreeBooks,
+		setDegreeBooks,
+		getDataDegreeBook,
+		selectedBook,
+		setSelectedBook,
+		addDegreeBook,
+		updateDegreeBook,
+	} = useModel('degreebook');
 	const [form] = Form.useForm();
-	const handleSubmit = (values: { year: number }) => {
-		form.validateFields().then((values: any) => {
-			const { year } = values; //Lấy thuộc tính year từ đối tượng values, nơi chứa dữ liệu người dùng nhập vào
-
+	const handleSubmit = () => {
+		form.validateFields().then(async (values: any) => {
 			// Kiểm tra trùng năm
-			const isDuplicateYear = degreeBooks.some((book) => book.year === year && book.id !== selectedBook?.id);
+			const isDuplicateYear = degreeBooks.some((book) => book.year === values && book.id !== selectedBook?.id);
 
 			if (isDuplicateYear) {
 				form.setFields([
@@ -38,12 +45,16 @@ const FormDegreeBook = () => {
 			// localStorage.setItem('degreeBooks', JSON.stringify(dataTemp));
 			// setIsModalVisible(false);
 			// form.resetFields();
-			const newDegreeBook: VanBang.DegreeBook = { ...values, id: selectedBook?.id || `${degreeBooks.length + 1}` };
+			const newDegreeBook: VanBang.DegreeBook = {
+				...values,
+				id: selectedBook?.id || `${degreeBooks.length + 1}`,
+				currentSequenceNumber: 0,
+			};
 			if (selectedBook) {
-				setDegreeBooks(degreeBooks.map((item) => (item.id === selectedBook.id ? newDegreeBook : item)));
+				await updateDegreeBook(newDegreeBook);
 				message.success('Cập nhật sổ văn bằng thành công');
 			} else {
-				setDegreeBooks([...degreeBooks, newDegreeBook]);
+				await addDegreeBook(newDegreeBook);
 				message.success('Thêm sổ văn bằng thành công');
 			}
 		});
@@ -53,7 +64,7 @@ const FormDegreeBook = () => {
 			layout='vertical'
 			form={form}
 			onFinish={handleSubmit}
-			initialValues={selectedBook || { currentSequenceNumber: 0 }}
+			initialValues={{ currentSequenceNumber: selectedBook?.currentSequenceNumber || 0 }}
 		>
 			<Form.Item name='year' label='Năm' rules={[{ required: true, message: 'Vui lòng nhập năm' }]}>
 				<InputNumber min={2000} max={2100} style={{ width: '100%' }} />

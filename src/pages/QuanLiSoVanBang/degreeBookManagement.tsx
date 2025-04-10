@@ -8,6 +8,7 @@ import FormDegreeBook from './form';
 const DegreeBookManagement: React.FC = () => {
 	const {
 		isDetail,
+		setEdit,
 		setIsDetail,
 		isModalVisible,
 		setIsModalVisible,
@@ -21,22 +22,15 @@ const DegreeBookManagement: React.FC = () => {
 	const [form] = Form.useForm();
 
 	useEffect(() => {
-		const storedData = localStorage.getItem('degreeBooks');
-		if (storedData) {
-			setDegreeBooks(JSON.parse(storedData));
-		} else {
-			setDegreeBooks([]);
-		}
+		getDataDegreeBook();
 	}, []);
-	useEffect(() => {
-		localStorage.setItem('degreeBooks', JSON.stringify(degreeBooks));
-	}, [degreeBooks]);
 
 	const columns: ColumnsType<VanBang.DegreeBook> = [
 		{ title: 'ID', dataIndex: 'id', key: 'id' },
 		{
 			title: 'Năm',
 			dataIndex: 'year',
+			align: 'center',
 			key: 'year',
 			sorter: (a, b) => a.year - b.year,
 		},
@@ -45,11 +39,13 @@ const DegreeBookManagement: React.FC = () => {
 			title: 'Số lượng văn bằng',
 			dataIndex: 'currentSequenceNumber',
 			key: 'currentSequenceNumber',
+			align: 'center',
 		},
 
 		{
 			title: 'Hành động',
 			key: 'actions',
+			align: 'center',
 			render: (_, record) => (
 				<Space>
 					<Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>
@@ -58,10 +54,10 @@ const DegreeBookManagement: React.FC = () => {
 					<Button
 						style={{ marginLeft: 10 }}
 						onClick={() => {
-							const updatedBooks = degreeBooks.filter((item: any) => item.id !== record.id);
-							setDegreeBooks(updatedBooks);
+							const dataLocal: any = JSON.parse(localStorage.getItem('degreeBooks') as any);
+							const updatedBooks = dataLocal.filter((item: any) => item.id !== record.id);
 							localStorage.setItem('degreeBooks', JSON.stringify(updatedBooks));
-							// getDataDegreeBook();
+							getDataDegreeBook();
 						}}
 						type='primary'
 					>
@@ -77,6 +73,7 @@ const DegreeBookManagement: React.FC = () => {
 
 	const handleAddNew = () => {
 		setIsModalVisible(true);
+		setEdit(false);
 	};
 
 	const handleViewDetails = (record: VanBang.DegreeBook) => {
@@ -87,6 +84,7 @@ const DegreeBookManagement: React.FC = () => {
 	const handleEdit = (record: VanBang.DegreeBook) => {
 		setSelectedBook(record);
 		setIsModalVisible(true);
+		setEdit(true);
 	};
 
 	// const handleModalOk = () => {
@@ -97,7 +95,7 @@ const DegreeBookManagement: React.FC = () => {
 
 	const handleModalCancel = () => {
 		setIsModalVisible(false);
-		setSelectedBook(null);
+		// setSelectedBook(null);
 	};
 
 	return (
