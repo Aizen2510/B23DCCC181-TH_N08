@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Select, message, Typography, List } from 'antd';
-import type { Member, Club } from '@/types/quanlyclb';
-
+import type { Member, Club } from '@/types/QuanLiCauLacBo';
+import { useModel } from 'umi';
 const { Option } = Select;
 const { Text } = Typography;
 
@@ -36,7 +36,7 @@ const FormChangeMemberClub: React.FC<Props> = ({ open, onClose, selectedMembers,
 	return (
 		<Modal
 			title='Chuyển CLB cho thành viên'
-			open={open}
+			visible={open}
 			onCancel={handleCancel}
 			onOk={handleSubmit}
 			okText='Xác nhận'

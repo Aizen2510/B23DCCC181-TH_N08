@@ -6,66 +6,35 @@ import type {
 	ApplicationHistory,
 	ApplicationStatus,
 } from '@/types/QuanLiCauLacBo/index';
-import { set } from 'lodash';
-import { getClubs } from '@/services/QuanLiCauLacBo/clubManagementService';
+import { getMembersByClubId } from '@/services/QuanLiCauLacBo/memberService';
+import { useModel } from 'umi';
 import { message } from 'antd';
-const useClubsModel = () => {
+const useMemberModel = () => {
+	const { selectedClubId } = useModel('QuanLiCauLacBo.clubs');
 	//common model
 	const [isLoading, setLoading] = useState<boolean>(false);
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [isDetail, setIsDetail] = useState(false);
-
-	// Modal clubs
 	const [searchText, setSearchText] = useState<string>('');
-	const [clubs, setClubs] = useState<Club[]>([]);
-	const [currentClub, setCurrentClub] = useState<Club | null>(null);
-	const [filteredClubs, setFilteredClubs] = useState<Club[]>([]);
-	const [selectedClubId, setSelectedClubId] = useState<string>('');
-
-	// Áp dụng bộ lọc cho câu lạc bộ và chủ nhiệm
-	const applyFilters = (data: Club[], search: string) => {
-		let filtered = [...data];
-		if (search) {
-			filtered = filtered.filter(
-				(club) =>
-					club.name.toLowerCase().includes(search.toLowerCase()) ||
-					club.leader.toLowerCase().includes(search.toLowerCase()),
-			);
-		}
-		setFilteredClubs(filtered);
-	};
-
-	const fetchClub = async () => {
-		setLoading(true);
-		try {
-			const data = await getClubs();
-			setClubs(data);
-			applyFilters(data, searchText);
-		} catch (error) {
-			message.error('Không thể tải danh sách câu lạc bộ');
-		} finally {
-			setLoading(false);
-		}
-		setLoading(false);
-	};
 
 	//Model members
 	const [members, setMembers] = useState<Member[]>([]);
 	const [selectedMembers, setSelectedMembers] = useState<Member | null>(null); // Thành viên được chọn
 	const [selectedClubFilter, setSelectedClubFilter] = useState<string>(''); // Lọc theo CLB
-	const [sortBy, setSortBy] = useState<'joinedAt' | 'fullName'>('joinedAt');
-	const [search, setSearch] = useState('');
+	const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+	const [isChangeClubModalVisible, setIsChangeClubModalVisible] = useState<boolean>(false);
 
-	// Lấy danh sách thành viên từ localStorage (giả lập API)
 	const fetchMembers = async () => {
-		const localData: Member[] = JSON.parse(localStorage.getItem('memberManagement') || '[]');
-		if (!Array.isArray(localData)) {
-			console.error('Invalid data format in localStorage.');
-			setMembers([]);
-			return;
+		setLoading(true);
+		try {
+			const data = await getMembersByClubId(selectedClubId);
+			setMembers(data);
+		} catch (error) {
+			message.error('Không thể tải danh sách thành viên');
+		} finally {
+			setLoading(false);
 		}
-		setMembers(localData);
 	};
 
 	// Lọc thành viên theo CLB và trạng thái Approved (giả sử chỉ lưu Approved vào localStorage)
@@ -98,17 +67,8 @@ const useClubsModel = () => {
 		setLoading,
 		searchText,
 		setSearchText,
-		clubs,
-		setClubs,
-		currentClub,
-		setCurrentClub,
-		selectedClubId,
-		setSelectedClubId,
 		members,
 		setMembers,
-		filteredClubs,
-		setFilteredClubs,
-
 		admin,
 		setAdmin,
 		currentAdmin,
@@ -117,17 +77,16 @@ const useClubsModel = () => {
 		setSelectedMembers,
 		selectedClubFilter,
 		setSelectedClubFilter,
-		sortBy,
-		setSortBy,
-		search,
-		setSearch,
+		selectedRowKeys,
+		setSelectedRowKeys,
+		isChangeClubModalVisible,
+		setIsChangeClubModalVisible,
 
 		// CAsc hafm
-		fetchClub,
-		applyFilters,
+
 		fetchMembers,
 		getApprovedMembersByClub,
 		// changeMemberClub,
 	};
 };
-export default useClubsModel;
+export default useMemberModel;

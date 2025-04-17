@@ -1,35 +1,64 @@
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, message } from 'antd';
 import { useModel } from 'umi';
 import React, { useEffect } from 'react';
 import type { ApplicationForm } from '@/types/QuanLiCauLacBo';
 import { v4 as uuidv4 } from 'uuid';
-import { getApplicationForms } from '@/services/QuanLiCauLacBo/clubManagementService';
+import {
+	getApplicationForms,
+	updateApplicationForms,
+	addApplicationForms,
+} from '@/services/QuanLiCauLacBo/applicationFormService';
 const { Option } = Select;
 
 const FormInput = () => {
 	const [form] = Form.useForm();
-	const { applicationForm, setApplicationForm, isEdit, setIsModalVisible, currentapplicationForm } =
-		useModel('QuanLiCauLacBo.clubs');
+	const {
+		isEdit,
+		setEdit,
+		isModalVisible,
+		setIsModalVisible,
+		isDetail,
+		setIsDetail,
+		isLoading,
+		setLoading,
+		searchText,
+		setSearchText,
+		applicationForm,
+		setApplicationForm,
+		currentApplicationForm,
+		fetchApplications,
+		fetchHistory,
+	} = useModel('QuanLiCauLacBo.applicationform');
+
+	const { clubs, fetchClub } = useModel('QuanLiCauLacBo.clubs');
 
 	useEffect(() => {
-		if (currentapplicationForm) {
-			form.setFieldsValue(currentapplicationForm);
+		fetchClub();
+		fetchApplications();
+	}, []);
+
+	useEffect(() => {
+		if (currentApplicationForm) {
+			form.setFieldsValue(currentApplicationForm);
 		} else {
 			form.resetFields();
 		}
-	}, [currentapplicationForm]);
+	}, [currentApplicationForm]);
 
-	const handleSubmit = (values: ApplicationForm) => {
-		const updated = isEdit
-			? applicationForm.map((item) => (item.id === currentapplicationForm?.id ? values : item))
-			: [{ ...values, id: values.id || Date.now().toString() }, ...applicationForm];
+	const handleSubmit = () => {
+		form.validateFields().then(async (values: any) => {
+			const formData: ApplicationForm = { ...values, id: currentApplicationForm?.id || uuidv4() };
 
-		localStorage.setItem('applicationForm', JSON.stringify(updated));
-		setApplicationForm(updated);
-		form.resetFields();
-		setIsModalVisible(false);
-
-		getApplicationForms();
+			if (currentApplicationForm) {
+				updateApplicationForms(formData);
+				message.success('Cập nhật câu lạc bộ thành công!');
+			} else {
+				addApplicationForms(formData);
+				message.success('Thêm câu lạc bộ mới thành công!');
+			}
+			setIsModalVisible(false);
+			fetchApplications();
+		});
 	};
 
 	return (
@@ -56,11 +85,18 @@ const FormInput = () => {
 			<Form.Item name='strengths' label='Điểm Mạnh' rules={[{ required: true }]}>
 				<Input />
 			</Form.Item>
-			<Form.Item name='clubId' label='CLB Muốn Đăng Ký' rules={[{ required: true }]}>
-				<Select placeholder='Chọn CLB'>
-					<Option value='clb1'>CLB1</Option>
-					<Option value='clb2'>CLB2</Option>
-					<Option value='clb3'>CLB3</Option>
+			{/* nên kiểm tra xem clubs có được truyền vào hay là một mảng rỗng, nếu không sẽ gây lỗi  */}
+			<Form.Item name='clubId' label='Câu lạc bộ muốn đăng ký' rules={[{ required: true }]}>
+				<Select placeholder='Chọn một câu lạc bộ'>
+					{clubs && clubs.length > 0 ? (
+						clubs.map((item) => (
+							<Option key={item.id} value={item.id}>
+								{item.name}
+							</Option>
+						))
+					) : (
+						<Option disabled>Không có câu lạc bộ nào</Option>
+					)}
 				</Select>
 			</Form.Item>
 			<Form.Item name='reason' label='Lý Do Đăng Ký' rules={[{ required: true }]}>
@@ -79,7 +115,7 @@ const FormInput = () => {
 
 			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 				<Button htmlType='submit' type='primary'>
-					{isEdit ? 'Lưu' : 'Thêm Đơn'}
+					{currentApplicationForm ? 'Lưu' : 'Thêm Đơn'}
 				</Button>
 				<Button onClick={() => setIsModalVisible(false)}>Đóng</Button>
 			</div>

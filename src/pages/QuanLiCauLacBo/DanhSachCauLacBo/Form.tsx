@@ -5,7 +5,13 @@ import 'react-quill/dist/quill.snow.css';
 import { v4 as uuidv4 } from 'uuid';
 import { updateClub, addClub } from '@/services/QuanLiCauLacBo/clubManagementService';
 import { Club } from '@/types/QuanLiCauLacBo';
-const FormClub = () => {
+import moment from 'moment';
+
+interface ClubFormProps {
+	initialValues: Club | null;
+}
+
+const FormClub: React.FC<ClubFormProps> = ({ initialValues }) => {
 	const { setIsModalVisible, currentClub, fetchClub } = useModel('QuanLiCauLacBo.clubs');
 	const [form] = Form.useForm();
 	const handleSubmit = () => {
@@ -14,7 +20,7 @@ const FormClub = () => {
 				id: currentClub ? currentClub.id : uuidv4(),
 				name: values.name,
 				avatarUrl: values.avatarUrl || 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-				establishedDate: values.establishedDate.format('YYYY-MM-DD'),
+				establishedDate: moment(values.establishedDate).format('DD/MM/YYYY'),
 				description: values.description,
 				leader: values.leader,
 				isActive: values.isActive,

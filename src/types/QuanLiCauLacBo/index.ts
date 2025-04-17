@@ -18,7 +18,7 @@ export interface ApplicationForm {
 	phone: string;
 	gender: 'Male' | 'Female' | 'Other';
 	address: string;
-	strengths: string;
+	strengths: string; // Điểm mạnh
 	clubId: string; // Liên kết với Club
 	reason: string;
 	status: ApplicationStatus;

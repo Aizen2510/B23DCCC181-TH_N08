@@ -101,6 +101,12 @@ export default [
 				component: './QuanLiCauLacBo/QuanLiThanhVien/ClubMembers',
 				icon: 'UsergroupAddOutlined',
 			},
+			{
+				path: '/club-management/thong-ke-bao-cao',
+				name: 'Thống kê báo  cáo',
+				component: './QuanLiCauLacBo/ThongKeBaoCao/Report',
+				icon: 'BarChartOutlined',
+			},
 		],
 	},
 

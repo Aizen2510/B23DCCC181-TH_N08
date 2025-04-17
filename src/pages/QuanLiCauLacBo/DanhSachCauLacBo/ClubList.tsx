@@ -30,14 +30,9 @@ import moment from 'moment';
 import type { ColumnsType } from 'antd/es/table';
 import { useModel } from 'umi';
 import { Club, Member } from '@/types/QuanLiCauLacBo';
+import { useNavigate } from 'react-router-dom';
 
-import {
-	getClubs,
-	addClub,
-	updateClub,
-	deleteClub,
-	initializeDemoData,
-} from '@/services/QuanLiCauLacBo/clubManagementService';
+import { getClubs, addClub, updateClub, deleteClub } from '@/services/QuanLiCauLacBo/clubManagementService';
 import FormClub from './Form';
 const { Title, Text } = Typography;
 const { Search } = Input;
@@ -58,37 +53,21 @@ const ClubList: React.FC = () => {
 		applyFilters,
 		isEdit,
 	} = useModel('QuanLiCauLacBo.clubs');
+
 	const [form] = Form.useForm();
-	// const [form] = Form.useForm();
+	// const navigate = useNavigate();
+
 	useEffect(() => {
-		initializeDemoData();
 		fetchClub();
 	}, []);
+
 	// Cập nhật bộ lọc và tìm kiếm
 	useEffect(() => {
 		applyFilters(clubs, searchText);
-	}, [clubs, setSearchText]);
+	}, [searchText, clubs]);
 
 	const showModal = (club?: Club) => {
 		setCurrentClub(club || null);
-
-		if (club) {
-			form.setFieldsValue({
-				name: club.name,
-				avatarUrl: club.avatarUrl,
-				establishedDate: moment(club.establishedDate),
-				description: club.description,
-				leader: club.leader,
-				isActive: club.isActive,
-			});
-		} else {
-			form.resetFields();
-			form.setFieldsValue({
-				isActive: true,
-				establishedDate: moment(),
-				avatarUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-			});
-		}
 
 		setIsModalVisible(true);
 	};
@@ -98,7 +77,9 @@ const ClubList: React.FC = () => {
 		message.success('Xóa câu lạc bộ thành công!');
 		fetchClub();
 	};
-	const viewMembers = (id: string) => {};
+	const viewMembers = (id: string) => {
+		// navigate(`/quan-li-cau-lac-bo/thanh-vien/${id}`);
+	};
 	const columns: ColumnsType<Club> = [
 		{
 			title: 'Ảnh đại diện',
@@ -116,7 +97,6 @@ const ClubList: React.FC = () => {
 			title: 'Ngày thành lập',
 			dataIndex: 'establishedDate',
 			key: 'establishedDate',
-			render: (text: string) => moment(text).format('DD/MM/YYYY'),
 			sorter: (a: Club, b: Club) => moment(a.establishedDate).unix() - moment(b.establishedDate).unix(),
 		},
 		{
@@ -132,6 +112,11 @@ const ClubList: React.FC = () => {
 			render: (active: boolean) =>
 				active ? <Tag color='green'>Đang hoạt động</Tag> : <Tag color='red'>Ngừng hoạt động</Tag>,
 			sorter: (a: Club, b: Club) => (a.isActive === b.isActive ? 0 : a.isActive ? -1 : 1),
+			filters: [
+				{ text: 'Đang hoạt động', value: true },
+				{ text: 'Ngừng hoạt động', value: false },
+			],
+			onFilter: (value: string | number | boolean, record: Club) => record.isActive === Boolean(value),
 		},
 		{
 			title: 'Thao tác',
@@ -154,21 +139,23 @@ const ClubList: React.FC = () => {
 	];
 
 	return (
-		<div style={{ padding: 24 }}>
+		<div style={{ padding: '14px' }}>
 			<Row gutter={[16, 16]} align='middle'>
 				<Col span={12}>
 					<Title level={2}>Quản Lý Câu Lạc Bộ</Title>
 				</Col>
 				<Col span={12} style={{ textAlign: 'right' }}>
 					<Space>
-						<Search
-							placeholder='Tìm kiếm câu lạc bộ'
+						<Input
+							placeholder='Tìm kiếm theo tên CLB hoặc chủ nhiệm'
+							// value={searchText}
 							onChange={(e) => setSearchText(e.target.value)}
 							style={{ width: 300 }}
+							prefix={<SearchOutlined />}
 							allowClear
 						/>
 						<Button type='primary' icon={<PlusOutlined />} onClick={() => showModal()}>
-							Thêm mới
+							Thêm câu lạc bộ mới
 						</Button>
 					</Space>
 				</Col>
@@ -199,7 +186,7 @@ const ClubList: React.FC = () => {
 				footer={null}
 				width={800}
 			>
-				<FormClub />
+				<FormClub initialValues={currentClub} />
 			</Modal>
 
 			{/* Club Members Modal */}
