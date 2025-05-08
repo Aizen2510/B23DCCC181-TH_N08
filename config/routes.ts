@@ -1,6 +1,6 @@
-﻿import component from '@/locales/en-US/component';
-import route from 'mock/route';
-import path from 'path';
+﻿// import component from '@/locales/en-US/component';
+// import route from 'mock/route';
+// import path from 'path';
 
 export default [
 	{
