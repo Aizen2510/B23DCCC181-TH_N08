@@ -83,6 +83,58 @@ export default [
 			},
 		],
 	},
+	{
+		path: '/du-lich',
+		name: 'Lập kế hoạch du lịch',
+		icon: 'DingtalkOutlined',
+		routes: [
+			{
+				path: '/du-lich',
+				redirect: '/du-lich/login', // Trang mặc định nếu chưa đăng nhập
+			},
+			{
+				path: '/du-lich/login',
+				component: './KeHoachDuLich/DangNhap/LoginRegister', // form đăng nhập
+				hideInMenu: true,
+			},
+			{
+				path: '/du-lich/user',
+				name: 'Trang người dùng',
+				component: './KeHoachDuLich/UserLayout', // Layout chung cho user
+				routes: [
+					{
+						path: '/du-lich/user',
+						redirect: '/du-lich/user/trang-chu',
+					},
+					{
+						path: '/du-lich/user/trang-chu',
+						name: 'Trang chủ',
+						component: './KeHoachDuLich/TrangUser/TrangChu',
+					},
+					{
+						path: '/du-lich/user/tao-lich-trinh',
+						name: 'Tạo lịch trình',
+						component: './KeHoachDuLich/TrangUser/LichTrinhDuLich',
+					},
+					{
+						path: '/du-lich/user/quan-ly-ngan-sach',
+						name: 'Quản lý ngân sách',
+						component: './KeHoachDuLich/TrangUser/NganSach',
+					},
+					{
+						path: '/du-lich/user/chi-tiet-diem-den',
+						name: 'Chi tiết điểm đến',
+						component: './KeHoachDuLich/TrangUser/ChiTietDiemDen',
+					},
+				],
+			},
+			{
+				path: '/du-lich/admin',
+				name: 'Trang quản trị',
+				component: './KeHoachDuLich/TrangAdmin/AdminPage',
+			},
+		],
+	},
 
 	// DANH MUC HE THONG
 	// {
